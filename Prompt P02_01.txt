@@ -1,0 +1,101 @@
+Berperanlah sebagai programmer C yang teliti dan dosen asisten praktikum algoritma.
+
+Saya ingin membuat program bahasa C untuk menyelesaikan studi kasus jasa pengiriman **Del-Express**.
+
+=== TUJUAN PROGRAM ===
+Buat program yang menghitung dan menampilkan **struk pembayaran pengiriman** berdasarkan:
+1. kode kota tujuan,
+2. berat paket Butet,
+3. berat paket Ucok,
+4. total berat,
+5. total ongkos kirim,
+6. informasi promo yang diperoleh.
+
+=== DESKRIPSI MASALAH ===
+Terdapat dua mahasiswa, yaitu Butet dan Ucok, yang ingin mengirim paket menggunakan jasa Del-Express.
+Sistem menerima input kode kota tujuan dan berat paket.
+Program harus menghitung biaya pengiriman berdasarkan:
+- daftar ongkir per kilogram untuk setiap kota tujuan,
+- aturan perbandingan atau hubungan berat paket Butet dan Ucok,
+- aturan promo yang berlaku,
+- lalu mencetak struk pembayaran.
+
+=== INPUT ===
+Input diberikan berulang dalam bentuk:
+- kode kota tujuan
+- berat paket Butet
+
+Contoh:
+MDN
+5
+JKT
+3
+BLG
+4
+END
+
+Keterangan:
+- Input berhenti jika user memasukkan kode kota `END`.
+- Setelah `END`, program selesai.
+- Untuk setiap kode kota sebelum `END`, berat paket Butet selalu diinput dalam bilangan bulat.
+
+=== ATURAN YANG HARUS DIGUNAKAN ===
+Gunakan aturan dari soal berikut:
+1. **Kode kota dan tarif ongkir per kg** mengikuti tabel pada gambar soal.
+2. **Berat paket Ucok** dihitung berdasarkan aturan perbandingan ukuran/berat dus pada gambar soal.
+3. **Promo** ditentukan berdasarkan poster promo pada gambar soal.
+4. Jika diperlukan, jelaskan terlebih dahulu asumsi yang dipakai sebelum menulis kode.
+5. Jika detail dari gambar tidak tersedia, buat struktur program yang mudah diubah dengan:
+   - array/string untuk daftar kota,
+   - array tarif ongkir,
+   - fungsi untuk hitung berat Ucok,
+   - fungsi untuk cek promo.
+
+=== OUTPUT ===
+Untuk setiap transaksi, tampilkan struk pembayaran yang berisi:
+- Kota tujuan
+- Berat paket Butet
+- Berat paket Ucok
+- Total berat
+- Total ongkos kirim
+- Informasi promo yang diperoleh
+
+Format output harus rapi dan mudah dibaca di console.
+
+=== STRUKTUR PROGRAM ===
+Gunakan bahasa **C**.
+Gunakan:
+- `stdio.h`
+- `string.h`
+
+Struktur program harus:
+1. memakai fungsi terpisah untuk:
+   - mencari tarif kota,
+   - menghitung berat paket Ucok,
+   - menghitung total ongkir,
+   - menentukan promo,
+   - mencetak struk.
+2. menggunakan percabangan atau array untuk memetakan kode kota.
+3. menggunakan perulangan untuk membaca banyak transaksi sampai `END`.
+
+=== BATASAN ===
+- Jangan gunakan GUI.
+- Jangan gunakan file eksternal.
+- Input hanya dari keyboard / stdin.
+- Output hanya ke console / stdout.
+- Tangani kode kota yang tidak valid.
+- Gunakan clean code dan beri komentar seperlunya.
+- Pastikan program bisa dikompilasi dengan compiler C standar.
+
+=== YANG SAYA BUTUHKAN DARI ANDA ===
+Berikan jawaban dalam urutan berikut:
+1. Penjelasan logika program langkah demi langkah.
+2. Daftar asumsi yang digunakan jika data gambar tidak tersedia.
+3. Kode C lengkap yang bisa langsung dijalankan.
+4. Contoh simulasi input dan output.
+5. Penjelasan singkat tiap fungsi.
+
+=== CATATAN PENTING ===
+Jika data tarif ongkir, promo, atau aturan berat Ucok pada gambar belum diketahui secara pasti, jangan mengarang tanpa memberi tanda. Sebutkan secara jelas bagian mana yang perlu diisi dari gambar soal, lalu tetap buat template program lengkap yang mudah disesuaikan.
+
+knp dibagian medan yg 5kg dapat diskon 10% padahal musti lebih dari 10 kg baru dapat diskon
