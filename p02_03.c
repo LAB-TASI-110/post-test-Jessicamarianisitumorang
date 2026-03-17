@@ -1,285 +1,312 @@
-//12S25027_Jessica Mariani Situmorang
-
 #include <stdio.h>
 #include <string.h>
 
-#define MAX_MENU 30
-#define MAX_DETAIL 100
+#define MAX_BAHAN 20
+#define MAX_MENU 20
+#define MAX_RESEP 10
+#define MAX_PESANAN 20
 
 typedef struct {
     char nama[50];
-    char kategori[20];
-    int harga;
     int stok;
-    int terjual;
-} Menu;
+    char satuan[20];
+} Bahan;
+
+typedef struct {
+    int indexBahan;
+    int jumlah;
+} ResepItem;
 
 typedef struct {
     char nama[50];
     int harga;
-    int jumlah;
+    int jumlahResep;
+    ResepItem resep[MAX_RESEP];
+} MenuItem;
+
+typedef struct {
+    int indexMenu;
+    int qty;
     int subtotal;
-} DetailPesanan;
+} PesananItem;
 
-void inisialisasiMenu(Menu menu[], int *jumlahMenu) {
-    *jumlahMenu = 23;
+Bahan daftarBahan[MAX_BAHAN];
+MenuItem daftarMenu[MAX_MENU];
+int jumlahBahan = 0;
+int jumlahMenu = 0;
 
-    // MAKANAN
-    strcpy(menu[0].nama, "Roti Isi Ayam");
-    strcpy(menu[0].kategori, "Makanan");
-    menu[0].harga = 15000; menu[0].stok = 20; menu[0].terjual = 0;
-
-    strcpy(menu[1].nama, "Risol");
-    strcpy(menu[1].kategori, "Makanan");
-    menu[1].harga = 10000; menu[1].stok = 20; menu[1].terjual = 0;
-
-    strcpy(menu[2].nama, "PKL");
-    strcpy(menu[2].kategori, "Makanan");
-    menu[2].harga = 10000; menu[2].stok = 20; menu[2].terjual = 0;
-
-    strcpy(menu[3].nama, "Sosis");
-    strcpy(menu[3].kategori, "Makanan");
-    menu[3].harga = 15000; menu[3].stok = 20; menu[3].terjual = 0;
-
-    strcpy(menu[4].nama, "Piscok");
-    strcpy(menu[4].kategori, "Makanan");
-    menu[4].harga = 10000; menu[4].stok = 20; menu[4].terjual = 0;
-
-    strcpy(menu[5].nama, "Nuget");
-    strcpy(menu[5].kategori, "Makanan");
-    menu[5].harga = 15000; menu[5].stok = 20; menu[5].terjual = 0;
-
-    strcpy(menu[6].nama, "Kentang");
-    strcpy(menu[6].kategori, "Makanan");
-    menu[6].harga = 15000; menu[6].stok = 20; menu[6].terjual = 0;
-
-    strcpy(menu[7].nama, "Donat");
-    strcpy(menu[7].kategori, "Makanan");
-    menu[7].harga = 10000; menu[7].stok = 20; menu[7].terjual = 0;
-
-    strcpy(menu[8].nama, "Bakwan");
-    strcpy(menu[8].kategori, "Makanan");
-    menu[8].harga = 10000; menu[8].stok = 20; menu[8].terjual = 0;
-
-    strcpy(menu[9].nama, "Tahu");
-    strcpy(menu[9].kategori, "Makanan");
-    menu[9].harga = 10000; menu[9].stok = 20; menu[9].terjual = 0;
-
-    strcpy(menu[10].nama, "Tempe");
-    strcpy(menu[10].kategori, "Makanan");
-    menu[10].harga = 10000; menu[10].stok = 20; menu[10].terjual = 0;
-
-    strcpy(menu[11].nama, "Gabin");
-    strcpy(menu[11].kategori, "Makanan");
-    menu[11].harga = 10000; menu[11].stok = 20; menu[11].terjual = 0;
-
-    strcpy(menu[12].nama, "Salad Buah");
-    strcpy(menu[12].kategori, "Makanan");
-    menu[12].harga = 15000; menu[12].stok = 20; menu[12].terjual = 0;
-
-    strcpy(menu[13].nama, "Sandwich");
-    strcpy(menu[13].kategori, "Makanan");
-    menu[13].harga = 12000; menu[13].stok = 20; menu[13].terjual = 0;
-
-    // MINUMAN
-    strcpy(menu[14].nama, "Chocolatos");
-    strcpy(menu[14].kategori, "Minuman");
-    menu[14].harga = 8000; menu[14].stok = 25; menu[14].terjual = 0;
-
-    strcpy(menu[15].nama, "Teh Tarik");
-    strcpy(menu[15].kategori, "Minuman");
-    menu[15].harga = 8000; menu[15].stok = 25; menu[15].terjual = 0;
-
-    strcpy(menu[16].nama, "Lemon Tea");
-    strcpy(menu[16].kategori, "Minuman");
-    menu[16].harga = 8000; menu[16].stok = 25; menu[16].terjual = 0;
-
-    strcpy(menu[17].nama, "Capucino");
-    strcpy(menu[17].kategori, "Minuman");
-    menu[17].harga = 8000; menu[17].stok = 25; menu[17].terjual = 0;
-
-    strcpy(menu[18].nama, "Kopi Hitam");
-    strcpy(menu[18].kategori, "Minuman");
-    menu[18].harga = 5000; menu[18].stok = 25; menu[18].terjual = 0;
-
-    strcpy(menu[19].nama, "Kopi Susu");
-    strcpy(menu[19].kategori, "Minuman");
-    menu[19].harga = 7000; menu[19].stok = 25; menu[19].terjual = 0;
-
-    strcpy(menu[20].nama, "Teh Manis");
-    strcpy(menu[20].kategori, "Minuman");
-    menu[20].harga = 5000; menu[20].stok = 25; menu[20].terjual = 0;
-
-    strcpy(menu[21].nama, "Sogem");
-    strcpy(menu[21].kategori, "Minuman");
-    menu[21].harga = 8000; menu[21].stok = 25; menu[21].terjual = 0;
-
-    strcpy(menu[22].nama, "Matcha");
-    strcpy(menu[22].kategori, "Minuman");
-    menu[22].harga = 10000; menu[22].stok = 25; menu[22].terjual = 0;
+void tambahBahanAwal(const char *nama, int stok, const char *satuan) {
+    strcpy(daftarBahan[jumlahBahan].nama, nama);
+    daftarBahan[jumlahBahan].stok = stok;
+    strcpy(daftarBahan[jumlahBahan].satuan, satuan);
+    jumlahBahan++;
 }
 
-void tampilkanMenu(Menu menu[], int jumlahMenu) {
+void tambahMenuAwal(const char *nama, int harga) {
+    strcpy(daftarMenu[jumlahMenu].nama, nama);
+    daftarMenu[jumlahMenu].harga = harga;
+    daftarMenu[jumlahMenu].jumlahResep = 0;
+    jumlahMenu++;
+}
+
+void tambahResep(int indexMenu, int indexBahan, int jumlah) {
+    int r = daftarMenu[indexMenu].jumlahResep;
+    daftarMenu[indexMenu].resep[r].indexBahan = indexBahan;
+    daftarMenu[indexMenu].resep[r].jumlah = jumlah;
+    daftarMenu[indexMenu].jumlahResep++;
+}
+
+void inisialisasiData() {
+    // Data bahan
+    tambahBahanAwal("Nasi", 50, "porsi");
+    tambahBahanAwal("Ayam", 30, "potong");
+    tambahBahanAwal("Mie", 40, "bungkus");
+    tambahBahanAwal("Telur", 50, "butir");
+    tambahBahanAwal("Teh", 100, "gelas");
+    tambahBahanAwal("Kopi", 80, "gelas");
+    tambahBahanAwal("Gula", 100, "sendok");
+    tambahBahanAwal("Air Mineral", 100, "botol");
+    tambahBahanAwal("Es Batu", 100, "kubus");
+
+    // Data menu
+    tambahMenuAwal("Nasi Goreng", 15000);
+    tambahMenuAwal("Mie Goreng", 14000);
+    tambahMenuAwal("Ayam Goreng", 18000);
+    tambahMenuAwal("Es Teh", 5000);
+    tambahMenuAwal("Kopi Hitam", 7000);
+    tambahMenuAwal("Air Mineral", 4000);
+
+    // Resep menu
+    // Nasi Goreng
+    tambahResep(0, 0, 1); // Nasi
+    tambahResep(0, 3, 1); // Telur
+    tambahResep(0, 6, 1); // Gula (simbolik bahan tambahan)
+
+    // Mie Goreng
+    tambahResep(1, 2, 1); // Mie
+    tambahResep(1, 3, 1); // Telur
+
+    // Ayam Goreng
+    tambahResep(2, 1, 1); // Ayam
+    tambahResep(2, 0, 1); // Nasi
+
+    // Es Teh
+    tambahResep(3, 4, 1); // Teh
+    tambahResep(3, 6, 1); // Gula
+    tambahResep(3, 8, 2); // Es Batu
+
+    // Kopi Hitam
+    tambahResep(4, 5, 1); // Kopi
+    tambahResep(4, 6, 1); // Gula
+
+    // Air Mineral
+    tambahResep(5, 7, 1); // Air Mineral
+}
+
+void tampilkanDaftarMenu() {
     int i;
-    printf("\n========================= DAFTAR MENU =========================\n");
-    printf("%-4s %-20s %-12s %-10s %-6s\n", "No", "Nama", "Kategori", "Harga", "Stok");
-    printf("---------------------------------------------------------------\n");
+    printf("\n========== DAFTAR MENU ==========\n");
+    printf("%-5s %-20s %-10s\n", "No", "Nama Menu", "Harga");
     for (i = 0; i < jumlahMenu; i++) {
-        printf("%-4d %-20s %-12s Rp%-8d %-6d\n",
-               i + 1, menu[i].nama, menu[i].kategori, menu[i].harga, menu[i].stok);
+        printf("%-5d %-20s Rp%-10d\n", i + 1, daftarMenu[i].nama, daftarMenu[i].harga);
     }
-    printf("===============================================================\n");
+    printf("=================================\n");
 }
 
-void tampilkanStok(Menu menu[], int jumlahMenu) {
+void tampilkanStokBahan() {
     int i;
-    printf("\n========================= SISA STOK ===========================\n");
-    printf("%-4s %-20s %-12s %-6s\n", "No", "Nama", "Kategori", "Stok");
-    printf("---------------------------------------------------------------\n");
-    for (i = 0; i < jumlahMenu; i++) {
-        printf("%-4d %-20s %-12s %-6d\n",
-               i + 1, menu[i].nama, menu[i].kategori, menu[i].stok);
-    }
-    printf("===============================================================\n");
-}
-
-void cetakStruk(DetailPesanan detail[], int jumlahDetail, int totalBayar) {
-    int i;
-    printf("\n========================== STRUK ==============================\n");
-    printf("%-4s %-20s %-8s %-8s %-10s\n", "No", "Nama", "Harga", "Jumlah", "Subtotal");
-    printf("---------------------------------------------------------------\n");
-    for (i = 0; i < jumlahDetail; i++) {
-        printf("%-4d %-20s %-8d %-8d %-10d\n",
+    printf("\n========== STOK BAHAN ==========\n");
+    printf("%-5s %-20s %-10s %-10s\n", "No", "Nama Bahan", "Stok", "Satuan");
+    for (i = 0; i < jumlahBahan; i++) {
+        printf("%-5d %-20s %-10d %-10s\n",
                i + 1,
-               detail[i].nama,
-               detail[i].harga,
-               detail[i].jumlah,
-               detail[i].subtotal);
+               daftarBahan[i].nama,
+               daftarBahan[i].stok,
+               daftarBahan[i].satuan);
     }
-    printf("---------------------------------------------------------------\n");
-    printf("TOTAL BAYAR : Rp%d\n", totalBayar);
-    printf("===============================================================\n");
+    printf("================================\n");
 }
 
-void prosesPesanan(Menu menu[], int jumlahMenu, int *totalPendapatan) {
-    DetailPesanan detail[MAX_DETAIL];
-    int jumlahDetail = 0;
-    int nomorMenu, jumlah, subtotal, totalBayar = 0;
-    char lanjut = 'y';
+int cekStokCukup(int indexMenu, int qty) {
+    int i;
+    for (i = 0; i < daftarMenu[indexMenu].jumlahResep; i++) {
+        int idxBahan = daftarMenu[indexMenu].resep[i].indexBahan;
+        int kebutuhan = daftarMenu[indexMenu].resep[i].jumlah * qty;
+        if (daftarBahan[idxBahan].stok < kebutuhan) {
+            return 0;
+        }
+    }
+    return 1;
+}
 
-    while (lanjut == 'y' || lanjut == 'Y') {
-        tampilkanMenu(menu, jumlahMenu);
+void kurangiStok(int indexMenu, int qty) {
+    int i;
+    for (i = 0; i < daftarMenu[indexMenu].jumlahResep; i++) {
+        int idxBahan = daftarMenu[indexMenu].resep[i].indexBahan;
+        int kebutuhan = daftarMenu[indexMenu].resep[i].jumlah * qty;
+        daftarBahan[idxBahan].stok -= kebutuhan;
+    }
+}
 
-        printf("Masukkan nomor menu (0 untuk selesai): ");
-        scanf("%d", &nomorMenu);
+void cetakStruk(PesananItem pesanan[], int jumlahPesanan, int total, int bayar, int kembalian) {
+    int i;
+    printf("\n=========== STRUK PEMBAYARAN ===========\n");
+    printf("Kafetaria IT Del\n");
+    printf("----------------------------------------\n");
+    printf("%-20s %-5s %-10s\n", "Menu", "Qty", "Subtotal");
 
-        if (nomorMenu == 0) {
+    for (i = 0; i < jumlahPesanan; i++) {
+        printf("%-20s %-5d Rp%-10d\n",
+               daftarMenu[pesanan[i].indexMenu].nama,
+               pesanan[i].qty,
+               pesanan[i].subtotal);
+    }
+
+    printf("----------------------------------------\n");
+    printf("Total Bayar   : Rp%d\n", total);
+    printf("Uang Bayar    : Rp%d\n", bayar);
+    printf("Kembalian     : Rp%d\n", kembalian);
+    printf("========================================\n");
+    printf("Terima kasih telah berbelanja!\n");
+}
+
+void prosesPesanan() {
+    PesananItem pesanan[MAX_PESANAN];
+    int jumlahPesanan = 0;
+    int pilihan, qty;
+    int total = 0;
+    int bayar, kembalian;
+    int i;
+
+    while (1) {
+        tampilkanDaftarMenu();
+        printf("Pilih nomor menu (0 untuk selesai): ");
+        scanf("%d", &pilihan);
+
+        if (pilihan == 0) {
             break;
         }
 
-        if (nomorMenu < 1 || nomorMenu > jumlahMenu) {
-            printf("Nomor menu tidak valid!\n");
+        if (pilihan < 1 || pilihan > jumlahMenu) {
+            printf("Pilihan menu tidak valid!\n");
             continue;
         }
 
         printf("Masukkan jumlah pesanan: ");
-        scanf("%d", &jumlah);
+        scanf("%d", &qty);
 
-        if (jumlah <= 0) {
+        if (qty <= 0) {
             printf("Jumlah pesanan harus lebih dari 0!\n");
             continue;
         }
 
-        if (jumlah > menu[nomorMenu - 1].stok) {
-            printf("Stok %s tidak cukup. Stok tersedia: %d\n",
-                   menu[nomorMenu - 1].nama,
-                   menu[nomorMenu - 1].stok);
+        if (!cekStokCukup(pilihan - 1, qty)) {
+            printf("Stok bahan untuk menu '%s' tidak mencukupi!\n", daftarMenu[pilihan - 1].nama);
             continue;
         }
 
-        subtotal = menu[nomorMenu - 1].harga * jumlah;
+        pesanan[jumlahPesanan].indexMenu = pilihan - 1;
+        pesanan[jumlahPesanan].qty = qty;
+        pesanan[jumlahPesanan].subtotal = daftarMenu[pilihan - 1].harga * qty;
 
-        strcpy(detail[jumlahDetail].nama, menu[nomorMenu - 1].nama);
-        detail[jumlahDetail].harga = menu[nomorMenu - 1].harga;
-        detail[jumlahDetail].jumlah = jumlah;
-        detail[jumlahDetail].subtotal = subtotal;
+        total += pesanan[jumlahPesanan].subtotal;
+        jumlahPesanan++;
 
-        jumlahDetail++;
-        totalBayar += subtotal;
+        printf("Pesanan '%s' sebanyak %d berhasil ditambahkan.\n",
+               daftarMenu[pilihan - 1].nama, qty);
 
-        menu[nomorMenu - 1].stok -= jumlah;
-        menu[nomorMenu - 1].terjual += jumlah;
-
-        printf("Pesanan berhasil ditambahkan.\n");
-        printf("Tambah pesanan lagi? (y/n): ");
-        scanf(" %c", &lanjut);
+        if (jumlahPesanan >= MAX_PESANAN) {
+            printf("Batas maksimal item pesanan tercapai.\n");
+            break;
+        }
     }
 
-    if (jumlahDetail > 0) {
-        *totalPendapatan += totalBayar;
-        cetakStruk(detail, jumlahDetail, totalBayar);
-    } else {
-        printf("Tidak ada transaksi.\n");
+    if (jumlahPesanan == 0) {
+        printf("Belum ada pesanan yang diproses.\n");
+        return;
     }
+
+    // Kurangi stok setelah semua pesanan dikonfirmasi
+    for (i = 0; i < jumlahPesanan; i++) {
+        kurangiStok(pesanan[i].indexMenu, pesanan[i].qty);
+    }
+
+    printf("\nTotal pembayaran: Rp%d\n", total);
+
+    do {
+        printf("Masukkan jumlah uang bayar: Rp");
+        scanf("%d", &bayar);
+
+        if (bayar < total) {
+            printf("Uang pembayaran kurang!\n");
+        }
+    } while (bayar < total);
+
+    kembalian = bayar - total;
+
+    cetakStruk(pesanan, jumlahPesanan, total, bayar, kembalian);
 }
 
-void tampilkanLaporan(Menu menu[], int jumlahMenu, int totalPendapatan) {
-    int i;
-    printf("\n==================== LAPORAN PENJUALAN ========================\n");
-    printf("%-4s %-20s %-10s %-10s\n", "No", "Nama", "Terjual", "Pendapatan");
-    printf("---------------------------------------------------------------\n");
-    for (i = 0; i < jumlahMenu; i++) {
-        printf("%-4d %-20s %-10d Rp%-8d\n",
-               i + 1,
-               menu[i].nama,
-               menu[i].terjual,
-               menu[i].terjual * menu[i].harga);
+void tambahStokBahan() {
+    int pilihan, tambahan;
+
+    tampilkanStokBahan();
+    printf("Pilih nomor bahan yang ingin ditambah stoknya: ");
+    scanf("%d", &pilihan);
+
+    if (pilihan < 1 || pilihan > jumlahBahan) {
+        printf("Pilihan bahan tidak valid!\n");
+        return;
     }
-    printf("---------------------------------------------------------------\n");
-    printf("TOTAL PENDAPATAN HARIAN : Rp%d\n", totalPendapatan);
-    printf("===============================================================\n");
+
+    printf("Masukkan jumlah tambahan stok: ");
+    scanf("%d", &tambahan);
+
+    if (tambahan <= 0) {
+        printf("Jumlah tambahan harus lebih dari 0!\n");
+        return;
+    }
+
+    daftarBahan[pilihan - 1].stok += tambahan;
+    printf("Stok bahan '%s' berhasil ditambah.\n", daftarBahan[pilihan - 1].nama);
 }
 
 int main() {
-    Menu menu[MAX_MENU];
-    int jumlahMenu;
-    int pilihan;
-    int totalPendapatan = 0;
-
-    inisialisasiMenu(menu, &jumlahMenu);
+    int menuUtama;
+    inisialisasiData();
 
     do {
-        printf("\n================ SISTEM KAFETARIA IT DEL ================\n");
-        printf("1. Tampilkan Daftar Menu\n");
-        printf("2. Proses Pesanan\n");
-        printf("3. Tampilkan Sisa Stok\n");
-        printf("4. Tampilkan Laporan Penjualan Harian\n");
-        printf("5. Keluar\n");
-        printf("=========================================================\n");
+        printf("\n=====================================\n");
+        printf(" SISTEM OPERASIONAL KAFETARIA IT DEL \n");
+        printf("=====================================\n");
+        printf("1. Lihat daftar menu\n");
+        printf("2. Lihat stok bahan\n");
+        printf("3. Proses pesanan pelanggan\n");
+        printf("4. Tambah stok bahan\n");
+        printf("0. Keluar\n");
         printf("Pilih menu: ");
-        scanf("%d", &pilihan);
+        scanf("%d", &menuUtama);
 
-        switch (pilihan) {
+        switch (menuUtama) {
             case 1:
-                tampilkanMenu(menu, jumlahMenu);
+                tampilkanDaftarMenu();
                 break;
             case 2:
-                prosesPesanan(menu, jumlahMenu, &totalPendapatan);
+                tampilkanStokBahan();
                 break;
             case 3:
-                tampilkanStok(menu, jumlahMenu);
+                prosesPesanan();
                 break;
             case 4:
-                tampilkanLaporan(menu, jumlahMenu, totalPendapatan);
+                tambahStokBahan();
                 break;
-            case 5:
+            case 0:
                 printf("Program selesai. Terima kasih.\n");
                 break;
             default:
                 printf("Pilihan tidak valid!\n");
         }
-
-    } while (pilihan != 5);
+    } while (menuUtama != 0);
 
     return 0;
 }

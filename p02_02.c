@@ -1,53 +1,45 @@
-//12S25027_Jessica Mariani Situmorang   
-
 #include <stdio.h>
+#include <string.h>
 
 int main() {
-    int N, i;
-    int kode[100], stok[100];
-    int kodeCari;
-    int totalStok = 0;
-
-    printf("Kode Kategori Barang:\n");
-    printf("1 = Dasi SD\n");
-    printf("2 = Gula\n");
-    printf("3 = Rok Pramuka\n");
-    printf("4 = Minyak\n\n");
+    int N;
+    char kategori[100][50];
+    int stok[100];
+    char cari[50];
+    int total = 0;
 
     printf("Masukkan jumlah data barang: ");
     scanf("%d", &N);
+    getchar(); // membersihkan newline setelah scanf
 
-    for (i = 0; i < N; i++) {
-        printf("\nData barang ke-%d\n", i + 1);
-        printf("Masukkan kode kategori: ");
-        scanf("%d", &kode[i]);
+    // Input data kategori dan stok
+    for (int i = 0; i < N; i++) {
+        printf("\nData ke-%d\n", i + 1);
+
+        printf("Masukkan nama kategori: ");
+        fgets(kategori[i], sizeof(kategori[i]), stdin);
+        kategori[i][strcspn(kategori[i], "\n")] = '\0'; // hapus newline
+
         printf("Masukkan jumlah stok: ");
         scanf("%d", &stok[i]);
+        getchar(); // membersihkan newline
     }
 
-    printf("\nMasukkan kode kategori yang ingin diketahui total stoknya: ");
-    scanf("%d", &kodeCari);
+    // Input kategori yang dicari
+    printf("\nMasukkan kategori yang ingin diketahui stoknya: ");
+    fgets(cari, sizeof(cari), stdin);
+    cari[strcspn(cari, "\n")] = '\0'; // hapus newline
 
-    for (i = 0; i < N; i++) {
-        if (kode[i] == kodeCari) {
-            totalStok += stok[i];
+    // Proses penjumlahan stok sesuai kategori
+    for (int i = 0; i < N; i++) {
+        if (strcmp(kategori[i], cari) == 0) {
+            total += stok[i];
         }
     }
 
-    printf("\nTotal stok kategori ");
-    if (kodeCari == 1) {
-        printf("Dasi SD");
-    } else if (kodeCari == 2) {
-        printf("Gula");
-    } else if (kodeCari == 3) {
-        printf("Rok Pramuka");
-    } else if (kodeCari == 4) {
-        printf("Minyak");
-    } else {
-        printf("Tidak dikenal");
-    }
-
-    printf(" = %d\n", totalStok);
+    // Output hasil
+    printf("\nKategori : %s\n", cari);
+    printf("Total stok: %d\n", total);
 
     return 0;
 }

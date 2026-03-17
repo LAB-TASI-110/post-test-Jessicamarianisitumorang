@@ -1,171 +1,156 @@
-//12S25027_Jessica Mariani Situmorang
-
 #include <stdio.h>
 #include <string.h>
 
-#define JUMLAH_KOTA 4
+void getDataKota(const char kode[], char namaKota[], double *tarif, char kategori[], int *valid);
+double hitungBeratUcok(double beratButet);
+double hitungTotalBerat(double beratButet, double beratUcok);
+double hitungOngkirAwal(double totalBerat, double tarif);
+double hitungDiskon(double ongkirAwal, double totalBerat);
+double hitungOngkirAkhir(double ongkirAwal, double diskon);
+void tampilkanStruk(const char namaKota[], const char kode[], const char kategori[],
+                    double tarif, double beratButet, double beratUcok,
+                    double totalBerat, double ongkirAwal, double diskon,
+                    double ongkirAkhir, int asuransiGratis);
 
-/* Data kota berdasarkan gambar soal */
-const char kodeKota[JUMLAH_KOTA][4] = {"MDN", "BLG", "JKT", "SBY"};
-const char namaKota[JUMLAH_KOTA][20] = {"Medan", "Balige", "Jakarta", "Surabaya"};
-const int tarifKota[JUMLAH_KOTA] = {8000, 5000, 12000, 13000};
-const char kategoriKota[JUMLAH_KOTA][15] = {
-    "Dalam Pulau",
-    "Dalam Pulau",
-    "Luar Pulau",
-    "Luar Pulau"
-};
-
-/* Mencari indeks kota berdasarkan kode */
-int cariIndexKota(const char kode[]) {
-    int i;
-    for (i = 0; i < JUMLAH_KOTA; i++) {
-        if (strcmp(kode, kodeKota[i]) == 0) {
-            return i;
-        }
-    }
-    return -1;
-}
-
-/* Menghitung berat paket Ucok */
-float hitungBeratUcok(int beratButet) {
-    return 1.5f * beratButet;   /* 3/2 x berat Butet */
-}
-
-/* Menghitung total ongkir sebelum diskon */
-float hitungOngkirAwal(float totalBerat, int tarifPerKg) {
-    return totalBerat * tarifPerKg;
-}
-
-/* Menentukan promo dan besar diskon */
-void tentukanPromo(
-    const char kategori[],
-    float totalBerat,
-    float ongkirAwal,
-    float *diskon,
-    int *dapatAsuransi,
-    char infoPromo[]
-) {
-    int adaPromo = 0;
-
-    *diskon = 0.0f;
-    *dapatAsuransi = 0;
-    strcpy(infoPromo, "");
-
-    if (totalBerat > 10.0f) {
-        *diskon = 0.10f * ongkirAwal;
-        strcat(infoPromo, "Diskon ongkir 10%");
-        adaPromo = 1;
-    }
-
-    if (strcmp(kategori, "Luar Pulau") == 0) {
-        *dapatAsuransi = 1;
-        if (adaPromo) {
-            strcat(infoPromo, " + ");
-        }
-        strcat(infoPromo, "Asuransi gratis");
-        adaPromo = 1;
-    }
-
-    if (!adaPromo) {
-        strcpy(infoPromo, "Tidak ada promo");
-    }
-}
-
-/* Mencetak struk */
-void cetakStruk(
-    const char kode[],
-    const char nama[],
-    const char kategori[],
-    int beratButet,
-    float beratUcok,
-    float totalBerat,
-    int tarifPerKg,
-    float ongkirAwal,
-    float diskon,
-    float ongkirAkhir,
-    const char infoPromo[]
-) {
-    printf("\n========================================\n");
-    printf("      STRUK PEMBAYARAN DEL-EXPRESS      \n");
-    printf("========================================\n");
-    printf("Kode Kota        : %s\n", kode);
-    printf("Kota Tujuan      : %s\n", nama);
-    printf("Kategori Kota    : %s\n", kategori);
-    printf("----------------------------------------\n");
-    printf("Berat Butet      : %d.0 kg\n", beratButet);
-    printf("Berat Ucok       : %.1f kg\n", beratUcok);
-    printf("Total Berat      : %.1f kg\n", totalBerat);
-    printf("----------------------------------------\n");
-    printf("Tarif / Kg       : Rp %d\n", tarifPerKg);
-    printf("Ongkir Awal      : Rp %.0f\n", ongkirAwal);
-    printf("Diskon           : Rp %.0f\n", diskon);
-    printf("Total Bayar      : Rp %.0f\n", ongkirAkhir);
-    printf("Promo            : %s\n", infoPromo);
-    printf("========================================\n");
-}
-
-/* Program utama */
 int main() {
     char kode[10];
-    int beratButet;
-    int index;
+    char namaKota[50];
+    char kategori[30];
+    double tarif;
+    double beratButet;
+    double beratUcok;
+    double totalBerat;
+    double ongkirAwal;
+    double diskon;
+    double ongkirAkhir;
+    int valid;
+    int asuransiGratis;
+
+    printf("=== PROGRAM JASA PENGIRIMAN DEL-EXPRESS ===\n");
+    printf("Masukkan kode kota tujuan berulang.\n");
+    printf("Ketik END untuk berhenti.\n\n");
 
     while (1) {
-        printf("Masukkan kode kota (MDN/BLG/JKT/SBY) atau END untuk selesai: ");
+        printf("Masukkan kode kota tujuan (MDN/BLG/JKT/SBY/END): ");
         scanf("%s", kode);
 
         if (strcmp(kode, "END") == 0) {
-            printf("\nProgram selesai.\n");
+            printf("\nProgram selesai. Terima kasih.\n");
             break;
         }
 
-        index = cariIndexKota(kode);
+        getDataKota(kode, namaKota, &tarif, kategori, &valid);
 
-        if (index == -1) {
-            printf("Kode kota tidak valid!\n\n");
+        if (!valid) {
+            printf("Kode kota tidak valid. Silakan coba lagi.\n\n");
             continue;
         }
 
         printf("Masukkan berat paket Butet (kg): ");
-        scanf("%d", &beratButet);
+        scanf("%lf", &beratButet);
 
-        /* Proses perhitungan */
-        {
-            float beratUcok = hitungBeratUcok(beratButet);
-            float totalBerat = beratButet + beratUcok;
-            float ongkirAwal = hitungOngkirAwal(totalBerat, tarifKota[index]);
-            float diskon;
-            int dapatAsuransi;
-            char infoPromo[100];
-            float ongkirAkhir;
-
-            tentukanPromo(
-                kategoriKota[index],
-                totalBerat,
-                ongkirAwal,
-                &diskon,
-                &dapatAsuransi,
-                infoPromo
-            );
-
-            ongkirAkhir = ongkirAwal - diskon;
-
-            cetakStruk(
-                kodeKota[index],
-                namaKota[index],
-                kategoriKota[index],
-                beratButet,
-                beratUcok,
-                totalBerat,
-                tarifKota[index],
-                ongkirAwal,
-                diskon,
-                ongkirAkhir,
-                infoPromo
-            );
+        if (beratButet <= 0) {
+            printf("Berat paket harus lebih dari 0.\n\n");
+            continue;
         }
+
+        beratUcok = hitungBeratUcok(beratButet);
+        totalBerat = hitungTotalBerat(beratButet, beratUcok);
+        ongkirAwal = hitungOngkirAwal(totalBerat, tarif);
+        diskon = hitungDiskon(ongkirAwal, totalBerat);
+        ongkirAkhir = hitungOngkirAkhir(ongkirAwal, diskon);
+
+        if (strcmp(kategori, "Luar Pulau") == 0) {
+            asuransiGratis = 1;
+        } else {
+            asuransiGratis = 0;
+        }
+
+        tampilkanStruk(namaKota, kode, kategori, tarif, beratButet, beratUcok,
+                       totalBerat, ongkirAwal, diskon, ongkirAkhir, asuransiGratis);
     }
 
     return 0;
+}
+
+void getDataKota(const char kode[], char namaKota[], double *tarif, char kategori[], int *valid) {
+    *valid = 1;
+
+    if (strcmp(kode, "MDN") == 0) {
+        strcpy(namaKota, "Medan");
+        *tarif = 8000;
+        strcpy(kategori, "Dalam Pulau");
+    } else if (strcmp(kode, "BLG") == 0) {
+        strcpy(namaKota, "Balige");
+        *tarif = 5000;
+        strcpy(kategori, "Dalam Pulau");
+    } else if (strcmp(kode, "JKT") == 0) {
+        strcpy(namaKota, "Jakarta");
+        *tarif = 12000;
+        strcpy(kategori, "Luar Pulau");
+    } else if (strcmp(kode, "SBY") == 0) {
+        strcpy(namaKota, "Surabaya");
+        *tarif = 13000;
+        strcpy(kategori, "Luar Pulau");
+    } else {
+        *valid = 0;
+    }
+}
+
+double hitungBeratUcok(double beratButet) {
+    return 1.5 * beratButet;
+}
+
+double hitungTotalBerat(double beratButet, double beratUcok) {
+    return beratButet + beratUcok;
+}
+
+double hitungOngkirAwal(double totalBerat, double tarif) {
+    return totalBerat * tarif;
+}
+
+double hitungDiskon(double ongkirAwal, double totalBerat) {
+    if (totalBerat > 10) {
+        return 0.10 * ongkirAwal;
+    }
+    return 0;
+}
+
+double hitungOngkirAkhir(double ongkirAwal, double diskon) {
+    return ongkirAwal - diskon;
+}
+
+void tampilkanStruk(const char namaKota[], const char kode[], const char kategori[],
+                    double tarif, double beratButet, double beratUcok,
+                    double totalBerat, double ongkirAwal, double diskon,
+                    double ongkirAkhir, int asuransiGratis) {
+    printf("\n========================================\n");
+    printf("         STRUK PEMBAYARAN DEL-EXPRESS   \n");
+    printf("========================================\n");
+    printf("Kode Tujuan          : %s\n", kode);
+    printf("Kota Tujuan          : %s\n", namaKota);
+    printf("Kategori Wilayah     : %s\n", kategori);
+    printf("Tarif per kg         : Rp %.0f\n", tarif);
+    printf("----------------------------------------\n");
+    printf("Berat Paket Butet    : %.2f kg\n", beratButet);
+    printf("Berat Paket Ucok     : %.2f kg\n", beratUcok);
+    printf("Total Berat Kiriman  : %.2f kg\n", totalBerat);
+    printf("----------------------------------------\n");
+    printf("Ongkir Awal          : Rp %.0f\n", ongkirAwal);
+    printf("Diskon               : Rp %.0f\n", diskon);
+    printf("Total Ongkir Akhir   : Rp %.0f\n", ongkirAkhir);
+    printf("----------------------------------------\n");
+    printf("Promo Diperoleh      : ");
+
+    if (diskon > 0 && asuransiGratis) {
+        printf("Diskon 10%% + Asuransi Gratis\n");
+    } else if (diskon > 0) {
+        printf("Diskon 10%%\n");
+    } else if (asuransiGratis) {
+        printf("Asuransi Gratis\n");
+    } else {
+        printf("Tidak ada promo\n");
+    }
+
+    printf("========================================\n\n");
 }
